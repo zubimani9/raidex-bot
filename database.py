@@ -1,6 +1,6 @@
 import sqlite3
 from datetime import datetime, timedelta, timezone
-DB_PATH='raidex.db'
+DB_PATH='/tmp/raidex.db'
 def connect():
     c=sqlite3.connect(DB_PATH); c.row_factory=sqlite3.Row; return c
 def init_db():

@@ -1,9 +1,12 @@
-# RaiDEX Render Bot
-Upload these files to a GitHub repo. On Render create a Web Service.
-Build: `pip install -r requirements.txt`
-Start: `python bot.py`
-Add environment variable `BOT_TOKEN` with your NEW BotFather token.
-Optional `MINI_APP_URL` defaults to the live RaiDEX Mini App URL.
-Test `/start` after deployment.
-PRO uses Telegram Stars (XTR). Plans: 50/150/400 Stars for 7/30/90 days.
-Do not upload `.env` or `raidex.db`.
+# RaiDEX — Vercel webhook version
+
+1. Import this repository into Vercel.
+2. Add `BOT_TOKEN` as an Environment Variable.
+3. Optional: add `MINI_APP_URL`.
+4. Recommended: add `WEBHOOK_SECRET`.
+5. Deploy.
+6. Set Telegram webhook to:
+   `https://api.telegram.org/botBOT_TOKEN/setWebhook?url=https://YOUR-DOMAIN/api/index.py&secret_token=WEBHOOK_SECRET`
+
+Important: SQLite on Vercel `/tmp` is ephemeral. PRO/user/payment data is NOT persistent across cold starts/deployments. Use a persistent external database for production payments.
+Do not commit your `.env` or bot token.

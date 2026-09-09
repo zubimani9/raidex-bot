@@ -37,14 +37,17 @@ async def paid(u,c):
     pay=u.message.successful_payment; x=u.effective_user; p=pay.invoice_payload.split(':'); pid=p[1]; name,days,stars=PLANS[pid]
     if len(p)!=4 or int(p[2])!=x.id or pay.currency!='XTR' or pay.total_amount!=stars: await u.message.reply_text('Payment verification failed.'); return
     until=activate_pro(x.id,days); save_payment(x.id,pid,stars,pay.invoice_payload,pay.telegram_payment_charge_id); await u.message.reply_text(f'✅ Payment successful!\n\n💎 {name} activated.\nPRO until {until} UTC.',reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton('🚀 Open RaiDEX',web_app={'url':MINI})]]))
-def health():
-    class H(BaseHTTPRequestHandler):
-        def do_GET(self):
-            b=b'RaiDEX bot is running.'; self.send_response(200); self.send_header('Content-Length',str(len(b))); self.end_headers(); self.wfile.write(b)
-        def log_message(self,*a): pass
-    HTTPServer(('0.0.0.0',int(os.getenv('PORT','10000'))),H).serve_forever()
-def main():
-    init_db(); threading.Thread(target=health,daemon=True).start(); app=Application.builder().token(TOKEN).build()
-    for cmd,fn in [('start',start),('trending',trending),('vote',vote),('radar',radar),('pro',pro),('leaderboard',leaderboard),('profile',profile)]: app.add_handler(CommandHandler(cmd,fn))
-    app.add_handler(CallbackQueryHandler(callbacks)); app.add_handler(PreCheckoutQueryHandler(pre)); app.add_handler(MessageHandler(filters.SUCCESSFUL_PAYMENT,paid)); log.info('RaiDEX starting'); app.run_polling(allowed_updates=Update.ALL_TYPES)
-if __name__=='__main__': main()
+
+def build_application():
+    init_db()
+    app = Application.builder().token(TOKEN).updater(None).build()
+    for cmd, fn in [
+        ('start', start), ('trending', trending), ('vote', vote),
+        ('radar', radar), ('pro', pro), ('leaderboard', leaderboard),
+        ('profile', profile)
+    ]:
+        app.add_handler(CommandHandler(cmd, fn))
+    app.add_handler(CallbackQueryHandler(callbacks))
+    app.add_handler(PreCheckoutQueryHandler(pre))
+    app.add_handler(MessageHandler(filters.SUCCESSFUL_PAYMENT, paid))
+    return app
