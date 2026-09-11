@@ -1,24 +1,54 @@
-# RaiDEX — Vercel webhook version
+# RaiDEX Telegram Bot
 
-## Required Vercel environment variables
-- `BOT_TOKEN` — Telegram bot token
-- `MINI_APP_URL` — optional Mini App URL
-- `WEBHOOK_SECRET` — optional Telegram webhook secret
+Group raid tasks, Telegram Stars PRO, affiliate links, and the RaiDEX Mini App.
 
-## File structure
-```text
-api/
-  index.py
-bot.py
-database.py
-requirements.txt
-pyproject.toml
-vercel.json
-README.md
-```
+## GitHub files to edit
 
-Do not keep a second `index.py`, `index-1.py`, or `api/index-1.py`.
+| File | Action |
+|---|---|
+| `bot.py` | Replace entire file |
+| `database.py` | Replace entire file |
+| `README.md` | Replace entire file |
+| `requirements.txt` | Keep as-is |
+| `api/index.py` | Keep as-is (Vercel webhook) |
+| `vercel.json` | Keep as-is |
 
-After deployment, use the deployed Vercel function URL shown by Vercel for the Telegram webhook.
+Do not create a second `index.py`.
 
-Note: SQLite defaults to `/tmp/raidex.db` on Vercel and is ephemeral. For permanent production data, use a hosted database.
+## Commands
+
+- `/start` private welcome + referral capture
+- `/raid <x_link>` group admin starts a task (bot must be admin)
+- `/stop` group admin stops the raid
+- `/setmedia` reply to photo/GIF/video to save default raid media
+- `/clearmedia` remove default media
+- `/leaderboard` check-ins for the current group raid
+- `/plans` or `/pro` Telegram Stars checkout (private chat)
+- `/affiliate` referral link and Stars balance
+- `/profile`
+
+Free raid target: 10 likes, 5 comments, 3 reposts.
+
+PRO Stars:
+- 750 = 7 days
+- 1500 = 15 days
+- 2500 = 30 days
+
+Affiliate: `https://t.me/YOUR_BOT?start=refYOUR_ID` — 20% of referred PRO Stars.
+
+This bot posts a task card. It does not like, comment, or repost on X.
+
+## Environment variables
+
+- `BOT_TOKEN` required
+- `BOT_USERNAME` example `RaiDEX_RadarBot`
+- `RAIDEX_DB_PATH` PythonAnywhere: `/home/YOURUSER/raidex.db`
+- `MINI_APP_URL` optional
+- `WEBHOOK_SECRET` optional for Vercel
+- `AFF_PCT` optional, default `0.20`
+
+## BotFather
+
+1. Enable Stars / digital goods payments.
+2. Disable Group Privacy: `/setprivacy` → Disable, so group commands work.
+3. `/setcommands`
